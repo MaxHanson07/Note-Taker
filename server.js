@@ -12,6 +12,12 @@ var PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Starts the server to begin listening
+// =============================================================
+app.listen(PORT, function() {
+    console.log("App listening on PORT " + PORT);
+  });
+
 // Notes (DATA)
 // const notes = [];
 
@@ -31,12 +37,28 @@ app.get("*", function(req, res) {
 // Create API routes
 
 // Get /api/notes reads db.json and returns all saved notes as JSON
-// Displays all characters TODO:
-app.get("/api/characters", function(req, res) {
-    return res.json(characters);
+// TODO:
+app.get("/api/notes", function(req, res) {
+    return res.json(db.json);
   });
 
 // Post api/notes recieves a new note and saves it to db.json and returns new note to client
+app.post("/api/notes", function(req, res) {
+    // req.body hosts is equal to the JSON post sent from the user
+    // This works because of our body parsing middleware
+    const newNote = req.body;
+  
+    // Using a RegEx Pattern to remove spaces from newCharacter
+    // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
+    newNote.routeName = newNote.name.replace(/\s+/g, "").toLowerCase();
+  
+    console.log(newNote);
+  
+    // notes.push(newCharacter);
+  
+    res.json(newNote);
+  });
+
 // Delete /api/notes/:id Recieves querey parameter containing note id
     // Must give each note a unique id when saved
     // Delete notes by iterating over all saved notes until finding note with matching id
