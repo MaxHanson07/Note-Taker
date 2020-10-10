@@ -17,67 +17,46 @@ app.use(express.static('public'))
 
 // Starts the server to begin listening
 // =============================================================
-app.listen(PORT, function() {
-    console.log("App listening on PORT " + PORT);
-  });
-
-// Notes (DATA)
-// const notes = [];
+app.listen(PORT, function () {
+  console.log("App listening on PORT " + PORT);
+});
 
 // Create HTML Routes
 
 // Get /notes returns notes.html
-app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "/public/notes.html"));
-  });
-
-// db.json stores and retrieves notes using fs module TODO:
+app.get("/notes", function (req, res) {
+  res.sendFile(path.join(__dirname, "/public/notes.html"));
+});
 
 // Create API routes
 
 // Get /api/notes reads db.json and returns all saved notes as JSON
-// TODO:
-app.get("/api/notes", function(req, res) {
-  console.log(Object.values(db))
-    return res.json(Object.values(db));
-  });
+app.get("/api/notes", function (req, res) {
+  return res.json(Object.values(db));
+});
 
 // Post api/notes recieves a new note and saves it to db.json and returns new note to client
-app.post("/api/notes", function(req, res) {
-    // req.body hosts is equal to the JSON post sent from the user
-    // This works because of our body parsing middleware
-    const newNote = req.body;
-  
-    // // Using a RegEx Pattern to remove spaces from newCharacter
-    // // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-    // newNote.routeName = newNote.name.replace(/\s+/g, "").toLowerCase();
-    
-    // db.push({
-    //   id: Math.floor(1000 * Math.random()),
-    //   ...newNote
-    // });
+app.post("/api/notes", function (req, res) {
+  // req.body hosts is equal to the JSON post sent from the user
+  // This works because of our body parsing middleware
+  const newNote = req.body;
 
-    const noteId =Math.floor(1000 * Math.random()) 
+  const noteId = Math.floor(1000 * Math.random())
 
-    db[noteId] = {
-      id: noteId,
-      ...newNote
-    }
+  db[noteId] = {
+    id: noteId,
+    ...newNote
+  }
 
-    fs.writeFileSync("./db/db.json", JSON.stringify(db))
-    res.json(newNote);
-  });
+  fs.writeFileSync("./db/db.json", JSON.stringify(db))
+  res.json(newNote);
+});
 
 // Delete /api/notes/:id Recieves querey parameter containing note id
-    // Must give each note a unique id when saved
-    // Delete notes by iterating over all saved notes until finding note with matching id
-
-app.delete("/api/notes/:id", function(req, res) {
+// Must give each note a unique id when saved
+// Delete notes by iterating over all saved notes until finding note with matching id
+app.delete("/api/notes/:id", function (req, res) {
   const id = req.params.id
-
-  // const noteIndex = db.findIndex((note) => note.id === id)
-
-  // db.splice(noteIndex, 1)
 
   delete db[id]
 
@@ -87,6 +66,6 @@ app.delete("/api/notes/:id", function(req, res) {
 })
 
 // Get * returns index.html
-app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
-  });
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "/public/index.html"));
+});
